@@ -11,9 +11,9 @@
 int main (int argc, string argv[])
 {
     //checking if a single hash is entered into command line
-    if (argc !=2)
+    if (argc != 2)
     {
-        printf("Paste a single hash:");
+        printf("Paste a single hash:\n");
         return 1;
     }
     char test[6] ;  // initialize empty string for generating test passwords
@@ -38,21 +38,20 @@ int main (int argc, string argv[])
                     if (ii == 91) ii = 97;  // jump over irrelevant characters in ASCI table
                     for ( int i = 65 ; i < 123; i++)  // main loop for changing letters
                     {
-                        //if (size == 5) test[size-2] = (char) iiiiii;
-                        if (size == 4) test[size-4] = (char) iiiii; //if letter is needed put it to the beggining. Move right another one is added
-                        if (size >= 3) test[size-3] = (char) iiii;  //if letter is needed put it to the beggining. Move right another one is added
-                        if (size >= 2) test[size-2] = (char) iii;   //if letter is needed put it to the beggining. Move right another one is added
-                        if (size >= 1) test[size-1] = (char) ii;    //if letter is needed put it to the beggining. Move right another one is added
+                        if (size == 4) test[size - 4] = (char) iiiii; //if letter is needed put it to the beggining. Move right another one is added
+                        if (size >= 3) test[size - 3] = (char) iiii;  //if letter is needed put it to the beggining. Move right another one is added
+                        if (size >= 2) test[size - 2] = (char) iii;   //if letter is needed put it to the beggining. Move right another one is added
+                        if (size >= 1) test[size - 1] = (char) ii;    //if letter is needed put it to the beggining. Move right another one is added
 
                         if (i == 91) i = 97;  // jump over irrelevant characters in ASCI table
-                        test[0+size] = (char) i;
-                        test[1+size] = '\0';
+                        test[0 + size] = (char) i;
+                        test[1 + size] = '\0';
                         if (strcmp(crypt(test, "50"), argv[1])  == 0) //checking if test hash and input hash are equal
                         {
-                            printf("%s Yessssss\n",test);
+                            printf("%s\n", test);
                             return 0;  // end testing if matching hash is found
                         }
-                        printf("%s Not found\n",test );
+                        //  printf("%s Not found\n",test ); //uncomment for debugging
                         if (size < 1 && i == 122) {size ++; i = 64;}         // repeat 1 letter loop
                         if (size < 2 && ii == 122) {size ++; ii = 64;}       // repeat 2 letter loop for both letters
                         if (size < 3 && iii == 122) {size ++; iii = 64;}     // repeat 3 letter loop for all letters
