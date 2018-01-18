@@ -1,0 +1,92 @@
+// Helper functions for music
+
+#include <cs50.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include "helpers.h"
+
+// Converts a fraction formatted as X/Y to eighths
+int duration(string fraction)
+{
+    int eighth = fraction[2] - 48; //converting Y to int (numbers are 48-57 ascii characters)
+    int leng = fraction[0] - 48;
+    if ( eighth > 8 ) // base case if note is not valid
+    {
+        fprintf(stderr, "Wrong note length\n");
+        return 1;
+    }
+    if (eighth == 8 ) // base case for recursion
+    {
+        return leng; // returning length of eighth note
+    }
+    else  // multiply both numbers by 2 and convert back to string which is passed to the function again
+    {
+        eighth *= 2;
+        leng *= 2 ;
+        sprintf(fraction, "%i/%i", leng, eighth);
+        return duration(fraction);
+    }
+}
+// function for finding semitone in octave
+int n(char a)
+{
+    switch (a)
+    {
+        case 'A':
+            return 0;
+            break;
+        case 'B':
+            return 2;
+            break;
+        case 'C':
+            return -9;
+            break;
+        case 'D':
+            return -7;
+            break;
+        case 'E':
+            return -5;
+            break;
+        case 'F':
+            return -4;
+            break;
+        case 'G':
+            return -2;
+            break;
+        default :
+            return printf("Not a valid note\n" );
+    }
+}
+
+// Calculates frequency (in Hz) of a note
+int frequency(string note)
+{
+    int hz;
+    int acc = 0; // int for accidentals
+
+    //finding an ocatave
+    int oct = note[1] - 48;
+    if (oct < 1 || oct > 9) {
+        oct = note[2] - 48;  // if # or b is in place, find octave in 2nd index;
+        // accidental # gives +1 semitone;
+        if (note[1] == 35)
+        acc++;
+        // accidental b gives -1 semitone;
+        if (note[1] == 98)
+        acc--;
+
+    }
+
+    //find hz for octave and then semitone
+    hz = round ( (55 * pow(2, (oct - 1))) * (pow(2, (n(note[0]) + acc) / 12.0 ) ) );
+    return hz ;
+}
+
+// Determines whether a string represents a rest
+bool is_rest(string s)
+{
+    return (strcmp(s, "")  == 0);
+
+}
